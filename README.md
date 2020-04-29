@@ -8,4 +8,7 @@ If the program wrestool is installed, it will also try and extract the executabl
 Available for install on Debian/Ubuntu Linux with:
 > $ sudo apt install icoutils
 
-Tested with Ubuntu 16.04 LTS and Python 3.5.2 and last edited 14/12/2017.
+Arch:
+> $ sudo pacman -S icoutils
+
+Forked from https://github.com/nelsonaloysio/wineshortcut
