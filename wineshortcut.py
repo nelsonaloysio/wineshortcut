@@ -17,16 +17,17 @@ and last edited 14/12/2017.
 
 from collections import defaultdict
 from os import chdir, getcwd
-from os.path import abspath, basename, dirname, isfile, splitext
+from os.path import abspath, basename, dirname, isfile, splitext, expanduser
 from re import findall
 from subprocess import call, check_output
 from sys import argv
-
-def main(input_file, icon_file=None, install=False):
+import argparse
+    
+def main(input_file, icon_file=None, install=False, fullInstall=False):
 
     output = """[Desktop Entry]
 Name=$NAME
-Exec=env WINEPREFIX="/home/neo/.wine" /usr/bin/wine C:\\\\windows\\\\command\\\\start.exe /Unix "$FILE"
+Exec=wine "$FILE"
 Type=Application
 StartupNotify=true
 Path=$PATH
@@ -38,7 +39,7 @@ StartupWMClass=$EXE"""
     name = splitext(exe)[0]
     file = abspath(input_file)
     path = dirname(file)
-    shortcut = name+'.desktop'
+    fileName = name+'.desktop'
 
     if not isfile(input_file):
         quit('Error: file', input_file, 'not found.')
@@ -96,18 +97,32 @@ StartupWMClass=$EXE"""
     else: output = output.replace('Icon=$ICON\n', '')
 
     if install:
-        shortcut = '/home/neo/.local/share/applications/wine/Programs/' + shortcut
+        desktop_shortcut = expanduser('~/Desktop/' + fileName)
 
-    with open(shortcut, 'w', newline='', encoding='utf8', errors='ignore') as output_file:
-        output_file.write(output)
+    writeShortcut(desktop_shortcut, output)
 
-    call(['chmod', '700', shortcut])
-    call(['chmod', '+x', shortcut])
+    if fullInstall:
+        menu_shortcut = expanduser('~/.local/share/applications/' + fileName)
+        writeShortcut(menu_shortcut, output)
 
     print(output)
 
+def writeShortcut(shortcutPath, output):
+    with open(shortcutPath, 'w', newline='', encoding='utf8', errors='ignore') as output_file:
+        output_file.write(output)
+    call(['chmod', '700', shortcutPath])
+    call(['chmod', '+x', shortcutPath])
+
 if __name__ == '__main__':
-    INSTALL=(True if '-i' in argv else False)
-    for input_file in argv[1:]:
-        if input_file != '-i':
-            main(argv[1], install=INSTALL)
+    parser = argparse.ArgumentParser(description='wine shortcut creator')
+    parser.add_argument('-i', '--install', help = 'install desktop shortcut', action = 'store_true')
+    parser.add_argument('-f', '--full', help = 'install on appmenu', action = 'store_true')
+    parser.add_argument('filename', help = 'exe file directory')
+    args = parser.parse_args()
+    INSTALL = False
+    FULL_INSTALL = False
+    if(args.install):
+        INSTALL=True
+    if(args.full):
+        FULL_INSTALL = True
+    main(args.filename, install=INSTALL, fullInstall=FULL_INSTALL)
