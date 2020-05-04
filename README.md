@@ -1,11 +1,61 @@
 wineshortcut
 ---
 
-A simple script aimed at creating shortcuts to Windows executable files to be opened in Wine.
+A simple Python script aimed at creating shortcuts to Windows executable files to be opened in Wine.
 
-If the program wrestool is installed, it will also try and extract the executable icon beforehand.
+```
+usage: wineshortcut [-h] [-o OUTPUT_FOLDER] [-n NAME] [-i ICON]
+                    [-c CATEGORIES] [-w WINE_PREFIX] [-d] [-a] [-s] [-p]
+                    input_file
 
-Available for install on Debian/Ubuntu Linux with:
-> $ sudo apt install icoutils
+positional arguments:
+  input_file            Windows executable file
 
-Tested with Ubuntu 16.04 LTS and Python 3.5.2 and last edited 14/12/2017.
+optional arguments:
+  -h, --help            show this help message and exit
+  -o OUTPUT_FOLDER, --output OUTPUT_FOLDER
+                        write shortcut to output directory
+  -n NAME, --name NAME  set custom shortcut name
+  -i ICON, --icon ICON  set custom shortcut icon
+  -c CATEGORIES, --categories CATEGORIES
+                        set custom shortcut categories
+  -w WINE_PREFIX, --wine-prefix WINE_PREFIX
+                        set custom Wine prefix
+  -d, --to-desktop      write shortcut to desktop folder
+  -a, --to-appmenu      write shortcut to application menu
+  -s, --skip-icon       disable executable icon extraction
+  -p, --print-output    disable shortcut creation, just print output
+```
+
+### Requirements
+
+Optionally requires **wrestool** to try and extract the executable icon.
+
+The program comes with the package **[icoutils](https://www.nongnu.org/icoutils/)** and can be installed with:
+
+* On Ubuntu/Debian: `apt install icoutils`
+* On Arch/Antergos/Manjaro: `pacman -S icoutils`
+* On Fedora/CentOS: `yum install icoutils`
+* On Mageia/Mandriva: `urpmi icoutils`
+* On SUSE: `zypper install icoutils`
+* On Gentoo: `emerge icoutils`
+
+### Examples
+
+Write shortcut to current working directory:
+> `wineshortcut.py file.exe`
+
+Write shortcut to desktop and application menu:
+> `wineshortcut.py file.exe -d -a`
+
+Write shortcut to a specific directory:
+> `wineshortcut.py file.exe -o /path/to/folder`
+
+Write shortcut with a system/user icon:
+> `wineshortcut.py file.exe -i icon_name`
+
+Write shortcuts with an existing icon file:
+> `wineshortcut.py file.exe -da -i /path/to/icon_file.png`
+
+Just print contents and do not extract icon:
+> `wineshortcut.py file.exe -p -s`
