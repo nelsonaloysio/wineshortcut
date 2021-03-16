@@ -8,8 +8,8 @@ Windows executable files to be opened in Wine.
 If the program wrestool is installed, it will also
 try and extract the executable icon beforehand.
 
-usage: wineshortcut [-h] [-o OUTPUT_FOLDER] [-n NAME] [-i ICON]
-                    [-c CATEGORIES] [-w WINE_PREFIX] [-d] [-a] [-s] [-p]
+usage: wineshortcut [-h] [-o OUTPUT_FOLDER] [-n NAME] [-i WITH_ICON]
+                    [-c CATEGORIES] [-w WINE_PREFIX] [-d] [-a] [-s] [-r]
                     input_file
 
 positional arguments:
@@ -19,16 +19,17 @@ optional arguments:
   -h, --help            show this help message and exit
   -o OUTPUT_FOLDER, --output OUTPUT_FOLDER
                         write shortcut to output directory
-  -n NAME, --name NAME  set custom shortcut name
-  -i ICON, --icon ICON  set custom shortcut icon
+  -n NAME, --name NAME  use custom shortcut name
+  -i WITH_ICON, --with-icon WITH_ICON
+                        use a custom shortcut icon
   -c CATEGORIES, --categories CATEGORIES
-                        set custom shortcut categories
+                        use custom shortcut categories
   -w WINE_PREFIX, --wine-prefix WINE_PREFIX
-                        set custom Wine prefix
+                        use a custom Wine prefix
   -d, --to-desktop      write shortcut to desktop folder
   -a, --to-appmenu      write shortcut to application menu
   -s, --skip-icon       disable executable icon extraction
-  -p, --dry-run    do not create shortcut, just print output
+  -r, --dry-run         do not create shortcut, just print output
 '''
 
 from argparse import ArgumentParser
@@ -234,13 +235,13 @@ if __name__ == '__main__':
         Argument('-d', '--to-desktop', 'write shortcut to desktop folder', action='store_true'),
         Argument('-a', '--to-appmenu', 'write shortcut to application menu', action='store_true'),
         Argument('-s', '--skip-icon', 'disable executable icon extraction', action='store_true'),
-        Argument('-p', '--dry-run', 'do not create shortcut, just print output', action='store_true')
+        Argument('-r', '--dry-run', 'do not create shortcut, just print output', action='store_true')
     ]
 
     parser = ArgumentParser(description='wineshortcut - create shortcut to Windows executable file')
     parser.add_argument('input_file', help='Windows executable file')
     for arg in arguments:
-        parser.add_argument(arg.short_switch, arg.long_switch, 
+        parser.add_argument(arg.short_switch, arg.long_switch,
             help=arg.description, action=arg.action, default=arg.default, dest=arg.dest)
     args = parser.parse_args()
 
@@ -250,7 +251,7 @@ if __name__ == '__main__':
         # if some options are not provided by command line arguments, try to load them from the file
         with open(CONFIG_FILE, 'r', encoding='utf8') as f:
             config_json = json.load(f)
-    
+
     # try to read configuration from file, filling out missing options
     for arg in arguments:
         config_key = arg.get_config_key_name()

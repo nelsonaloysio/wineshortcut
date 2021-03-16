@@ -4,8 +4,8 @@ wineshortcut
 A simple Python script aimed at creating shortcuts to Windows executable files to be opened in Wine.
 
 ```
-usage: wineshortcut [-h] [-o OUTPUT_FOLDER] [-n NAME] [-i ICON]
-                    [-c CATEGORIES] [-w WINE_PREFIX] [-d] [-a] [-s] [-p]
+usage: wineshortcut [-h] [-o OUTPUT_FOLDER] [-n NAME] [-i WITH_ICON]
+                    [-c CATEGORIES] [-w WINE_PREFIX] [-d] [-a] [-s] [-r]
                     input_file
 
 positional arguments:
@@ -15,16 +15,17 @@ optional arguments:
   -h, --help            show this help message and exit
   -o OUTPUT_FOLDER, --output OUTPUT_FOLDER
                         write shortcut to output directory
-  -n NAME, --name NAME  set custom shortcut name
-  -i ICON, --icon ICON  set custom shortcut icon
+  -n NAME, --name NAME  use custom shortcut name
+  -i WITH_ICON, --with-icon WITH_ICON
+                        use a custom shortcut icon
   -c CATEGORIES, --categories CATEGORIES
-                        set custom shortcut categories
+                        use custom shortcut categories
   -w WINE_PREFIX, --wine-prefix WINE_PREFIX
-                        set custom Wine prefix
+                        use a custom Wine prefix
   -d, --to-desktop      write shortcut to desktop folder
   -a, --to-appmenu      write shortcut to application menu
   -s, --skip-icon       disable executable icon extraction
-  -p, --print-output    disable shortcut creation, just print output
+  -r, --dry-run         do not create shortcut, just print output
 ```
 
 ### Requirements
